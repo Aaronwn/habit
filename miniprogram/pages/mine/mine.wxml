@@ -1,0 +1,75 @@
+<!-- pages/mine/mine.wxml -->
+<view class="page-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-header">
+      <!-- 已登录 -->
+      <block wx:if="{{hasLogin}}">
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image
+            class="avatar"
+            src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}"
+            mode="aspectFill"
+          />
+        </button>
+        <view class="user-info">
+          <view class="nickname-row" bindtap="onEditNickname">
+            <text class="nickname">{{userInfo.nickName || '微信用户'}}</text>
+            <text class="nickname-edit-icon">›</text>
+          </view>
+          <text class="user-slogan">坚持打卡，遇见更好的自己</text>
+        </view>
+      </block>
+      <!-- 未登录 -->
+      <block wx:else>
+        <view class="avatar-placeholder">
+          <text class="avatar-icon">👤</text>
+        </view>
+        <view class="user-info">
+          <text class="nickname">未登录</text>
+          <text class="login-hint">登录后可同步数据</text>
+        </view>
+        <button class="login-btn" bindtap="onLogin">登录</button>
+      </block>
+    </view>
+
+    <!-- 统计概览 -->
+    <view class="stats-overview">
+      <view class="stat-item">
+        <text class="stat-value">{{totalHabits}}</text>
+        <text class="stat-label">习惯数</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{totalCheckIns}}</text>
+        <text class="stat-label">累计打卡</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-value">{{currentStreak}}</text>
+        <text class="stat-label">连续天数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="onAbout">
+        <view class="menu-icon-wrapper" style="background-color: #F3E5F5">
+          <text class="menu-icon">ℹ️</text>
+        </view>
+        <view class="menu-content">
+          <text class="menu-title">关于我们</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部版本信息 -->
+  <view class="footer">
+    <text class="version-text">习惯打卡 v{{version}}</text>
+    <text class="copyright">坚持每一天，成就更好的自己</text>
+  </view>
+</view>

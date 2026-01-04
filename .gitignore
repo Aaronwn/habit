@@ -1,0 +1,46 @@
+# 微信小程序
+miniprogram_npm/
+node_modules/
+
+# 云函数
+cloudfunctions/**/node_modules/
+cloudfunctions/**/.DS_Store
+
+# 编译文件
+*.wxs.js
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+
+# 环境变量
+.env
+.env.local
+
+# 本地配置文件（包含云环境ID等敏感信息）
+miniprogram/config.js
+
+# 微信开发者工具生成的文件
+project.private.config.json
+
+# 其他
+*.bak
+*.swp
+
+# Python 虚拟环境
+.venv/

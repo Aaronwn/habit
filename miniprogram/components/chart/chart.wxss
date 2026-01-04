@@ -1,0 +1,5 @@
+.chart {
+  padding: 24rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+}

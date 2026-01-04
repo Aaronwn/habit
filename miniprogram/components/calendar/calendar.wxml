@@ -1,0 +1,80 @@
+<!-- components/calendar/calendar.wxml -->
+<view class="calendar">
+  <!-- 日历头部 -->
+  <view class="calendar-header">
+    <view class="header-left">
+      <view class="nav-btn" bindtap="prevMonth">
+        <text class="nav-icon">‹</text>
+      </view>
+    </view>
+
+    <view class="header-center" bindtap="goToday">
+      <text class="header-title">{{year}}年{{month}}月</text>
+      <text class="today-hint" wx:if="{{year !== currentYear || month !== currentMonth}}">返回今天</text>
+    </view>
+
+    <view class="header-right">
+      <view class="nav-btn" bindtap="nextMonth">
+        <text class="nav-icon">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 星期头 -->
+  <view class="week-header">
+    <view
+      class="week-day {{index === 0 || index === 6 ? 'weekend' : ''}}"
+      wx:for="{{weekDays}}"
+      wx:key="*this"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="date-grid">
+    <view
+      wx:for="{{calendarData}}"
+      wx:key="date"
+      class="date-cell {{item.isCurrentMonth ? '' : 'other-month'}} {{item.date === today ? 'today' : ''}} {{item.date === selectedDate ? 'selected' : ''}} {{checkInData[item.date] && checkInData[item.date].completed ? 'checked-in' : ''}}"
+      data-date="{{item.date}}"
+      data-iscurrentmonth="{{item.isCurrentMonth}}"
+      bindtap="onDateTap"
+    >
+      <view class="date-content">
+        <text class="date-number">{{item.day}}</text>
+        <!-- 打卡标记 -->
+        <view
+          wx:if="{{checkInData[item.date] && checkInData[item.date].completed}}"
+          class="check-mark"
+          style="background-color: {{color}}"
+        >
+          <text class="check-icon">✓</text>
+        </view>
+        <!-- 未完成标记 -->
+        <view
+          wx:elif="{{checkInData[item.date] && !checkInData[item.date].completed}}"
+          class="check-mark incomplete"
+        >
+          <text class="check-icon">○</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图例说明 -->
+  <view class="legend">
+    <view class="legend-item">
+      <view class="legend-dot" style="background-color: {{color}}"></view>
+      <text class="legend-text">已完成</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot incomplete"></view>
+      <text class="legend-text">未完成</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot today-dot"></view>
+      <text class="legend-text">今天</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,227 @@
+/* components/calendar/calendar.wxss */
+
+.calendar {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+/* 日历头部 */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  margin-bottom: 16rpx;
+}
+
+.header-left,
+.header-right {
+  width: 80rpx;
+}
+
+.nav-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #F5F6FA;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:active {
+  background-color: #E8E9F0;
+  transform: scale(0.95);
+}
+
+.nav-icon {
+  font-size: 40rpx;
+  color: #666;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.today-hint {
+  font-size: 22rpx;
+  color: #6C5CE7;
+  margin-top: 4rpx;
+}
+
+/* 星期头 */
+.week-header {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F0F0F5;
+  margin-bottom: 8rpx;
+}
+
+.week-day {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+.week-day.weekend {
+  color: #FF6B6B;
+}
+
+/* 日期网格 */
+.date-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.date-cell {
+  width: 14.2857%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.date-content {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.date-cell:active .date-content {
+  background-color: #F5F6FA;
+  transform: scale(0.95);
+}
+
+.date-number {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* 非当月日期 */
+.date-cell.other-month .date-number {
+  color: #ccc;
+}
+
+/* 今天 */
+.date-cell.today .date-content {
+  background-color: #F0EFFF;
+}
+
+.date-cell.today .date-number {
+  color: #6C5CE7;
+  font-weight: 600;
+}
+
+/* 选中状态 */
+.date-cell.selected .date-content {
+  background-color: #6C5CE7;
+}
+
+.date-cell.selected .date-number {
+  color: #fff;
+}
+
+/* 打卡标记 */
+.check-mark {
+  position: absolute;
+  bottom: 4rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-mark .check-icon {
+  font-size: 16rpx;
+  color: #fff;
+  line-height: 1;
+}
+
+.check-mark.incomplete {
+  background-color: #ddd;
+}
+
+.check-mark.incomplete .check-icon {
+  color: #999;
+  font-size: 14rpx;
+}
+
+/* 已打卡的日期样式 */
+.date-cell.checked-in .date-content {
+  background-color: rgba(108, 92, 231, 0.1);
+}
+
+.date-cell.checked-in .date-number {
+  color: #6C5CE7;
+}
+
+/* 选中 + 已打卡 */
+.date-cell.selected.checked-in .date-content {
+  background-color: #6C5CE7;
+}
+
+.date-cell.selected.checked-in .date-number {
+  color: #fff;
+}
+
+/* 图例 */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 32rpx;
+  margin-top: 24rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #F0F0F5;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.legend-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+}
+
+.legend-dot.incomplete {
+  background-color: #ddd;
+}
+
+.legend-dot.today-dot {
+  background-color: #F0EFFF;
+  border: 2rpx solid #6C5CE7;
+}
+
+.legend-text {
+  font-size: 22rpx;
+  color: #999;
+}

@@ -1,0 +1,38 @@
+<!-- components/icon-picker/icon-picker.wxml -->
+<view wx:if="{{show}}" class="picker-mask" bindtap="onClose">
+  <view class="picker-container" catchtap="preventBubble">
+    <!-- 头部 -->
+    <view class="picker-header">
+      <text class="picker-title">选择图标</text>
+      <view class="picker-close" bindtap="onClose">✕</view>
+    </view>
+
+    <!-- 分类标签 -->
+    <scroll-view class="category-tabs" scroll-x enable-flex>
+      <view
+        wx:for="{{categories}}"
+        wx:key="name"
+        class="category-tab {{activeCategory === index ? 'active' : ''}}"
+        bindtap="onCategoryChange"
+        data-index="{{index}}"
+      >
+        {{item.name}}
+      </view>
+    </scroll-view>
+
+    <!-- 图标网格 -->
+    <scroll-view class="icon-grid-scroll" scroll-y>
+      <view class="icon-grid">
+        <view
+          wx:for="{{categories[activeCategory].icons}}"
+          wx:key="*this"
+          class="icon-item {{selected === item ? 'selected' : ''}}"
+          bindtap="onSelectIcon"
+          data-icon="{{item}}"
+        >
+          <text class="icon-emoji">{{item}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,175 @@
+# 习惯打卡微信小程序 - 数据库集合定义
+
+## 数据库集合列表
+
+### 1. users（用户表）
+用于存储用户基本信息和设置。
+
+**字段说明：**
+```javascript
+{
+  _id: String,              // 自动生成
+  _openid: String,          // 微信用户openid（自动注入）
+  nickName: String,         // 用户昵称
+  avatarUrl: String,        // 头像URL
+  createdAt: Date,          // 创建时间
+  updatedAt: Date,          // 更新时间
+  settings: {
+    notificationEnabled: Boolean,  // 是否开启提醒
+    notificationTime: String       // 提醒时间（如"21:00"）
+  }
+}
+```
+
+**权限设置：**
+- 读权限：`doc._openid == auth.openid`
+- 写权限：`doc._openid == auth.openid`
+
+---
+
+### 2. habits（习惯表）
+用于存储用户的习惯信息。
+
+**字段说明：**
+```javascript
+{
+  _id: String,              // 自动生成
+  _openid: String,          // 用户openid
+  name: String,             // 习惯名称（必填，1-20字符）
+  icon: String,             // emoji图标
+  description: String,      // 描述（可选，最多100字符）
+  unit: String,             // 计量单位（可选，如"公里"、"分钟"）
+  targetValue: Number,      // 目标值（可选）
+  frequency: String,        // 频率："daily"（第一版仅支持每日）
+  color: String,            // 主题颜色（十六进制，如"#6C5CE7"）
+  sort: Number,             // 排序字段
+  isActive: Boolean,        // 是否激活（软删除标记）
+  createdAt: Date,          // 创建时间
+  updatedAt: Date           // 更新时间
+}
+```
+
+**索引：**
+- `_openid + sort`（复合索引，升序）
+- `_openid + isActive`（复合索引）
+
+**权限设置：**
+- 读权限：`doc._openid == auth.openid`
+- 写权限：`doc._openid == auth.openid`
+
+---
+
+### 3. check_ins（打卡记录表）
+用于存储用户的每日打卡记录。
+
+**字段说明：**
+```javascript
+{
+  _id: String,              // 自动生成
+  _openid: String,          // 用户openid
+  habitId: String,          // 关联的习惯ID
+  date: String,             // 打卡日期（YYYY-MM-DD格式）
+  completed: Boolean,       // 是否完成
+  value: Number,            // 完成数量（可选）
+  note: String,             // 备注（可选，最多200字符）
+  createdAt: Date,          // 创建时间
+  updatedAt: Date           // 更新时间
+}
+```
+
+**索引：**
+- `_openid + habitId + date`（复合唯一索引，防止重复打卡）
+- `_openid + date`（复合索引，查询某天所有打卡）
+- `habitId + date`（复合索引，查询某习惯的打卡记录）
+
+**权限设置：**
+- 读权限：`doc._openid == auth.openid`
+- 写权限：`doc._openid == auth.openid`
+
+---
+
+### 4. stats_cache（统计缓存表 - 可选）
+用于缓存统计数据，提升查询性能。
+
+**字段说明：**
+```javascript
+{
+  _id: String,              // 自动生成
+  _openid: String,          // 用户openid
+  habitId: String,          // 习惯ID
+  totalCheckIns: Number,    // 总打卡次数
+  currentStreak: Number,    // 当前连续天数
+  longestStreak: Number,    // 最长连续天数
+  lastCheckInDate: String,  // 最后打卡日期
+  checkInRate: Number,      // 打卡率（0-1之间的小数）
+  updatedAt: Date           // 更新时间
+}
+```
+
+**索引：**
+- `_openid + habitId`（复合唯一索引）
+
+**权限设置：**
+- 读权限：`doc._openid == auth.openid`
+- 写权限：`false`（仅云函数可写）
+
+---
+
+## 创建数据库集合步骤
+
+### 方式一：通过云开发控制台手动创建
+
+1. 登录微信小程序后台
+2. 进入「云开发」-> 「数据库」
+3. 点击「+」创建集合
+4. 依次创建：`users`, `habits`, `check_ins`
+5. 为每个集合配置权限（见上方权限设置）
+6. 添加索引（见上方索引定义）
+
+### 方式二：通过代码初始化（开发环境）
+
+在云函数中执行以下代码创建集合和索引（仅开发环境使用）：
+
+```javascript
+// 注意：生产环境建议通过控制台手动创建
+const cloud = require('wx-server-sdk')
+cloud.init()
+const db = cloud.database()
+
+// 创建索引示例（需要在云开发控制台执行）
+// habits集合索引
+db.collection('habits').aggregate()
+  .end()
+```
+
+---
+
+## 数据迁移和备份
+
+### 导出数据
+在云开发控制台「数据库」页面，选择集合后点击「导出」，可导出为 JSON 或 CSV 格式。
+
+### 导入数据
+在云开发控制台「数据库」页面，选择集合后点击「导入」，支持 JSON 和 CSV 格式导入。
+
+---
+
+## 注意事项
+
+1. **唯一索引**：`check_ins`集合的`_openid + habitId + date`必须设置为唯一索引，防止同一天重复打卡
+2. **软删除**：删除习惯时使用软删除（设置`isActive=false`），保留历史数据
+3. **数据权限**：所有集合都需要配置权限规则，确保用户只能访问自己的数据
+4. **日期格式**：统一使用YYYY-MM-DD格式存储日期，避免时区问题
+5. **性能优化**：为常用查询添加索引，提升查询速度
+
+---
+
+## 数据库配额（免费版）
+
+- 存储容量：2GB
+- 读操作数：5万次/天
+- 写操作数：3万次/天
+- 集合数量：50个
+- 索引数量：每个集合20个
+
+超出配额后可升级为按量付费或包年包月套餐。

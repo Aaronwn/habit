@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabBar 图标生成器</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    h1 { color: #333; text-align: center; }
+    .description {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .icons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .icon-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icon-card canvas {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .icon-name {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .download-btn {
+      background: #6C5CE7;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .download-btn:hover {
+      background: #5B4BD5;
+    }
+    .download-all {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+    .download-all:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+    }
+    .instructions {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .instructions h3 { color: #333; margin-top: 0; }
+    .instructions ol { color: #666; line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <h1>TabBar 图标生成器</h1>
+  <p class="description">点击下方按钮生成并下载小程序底部导航栏所需的图标</p>
+
+  <div class="icons-grid" id="iconsGrid"></div>
+
+  <button class="download-all" onclick="downloadAll()">下载全部图标</button>
+
+  <div class="instructions">
+    <h3>使用说明</h3>
+    <ol>
+      <li>点击"下载全部图标"按钮，会自动下载6个PNG图标文件</li>
+      <li>将下载的图标文件移动到 <code>miniprogram/images/icons/</code> 目录</li>
+      <li>图标尺寸为 81x81 像素，符合微信小程序规范</li>
+      <li>如需自定义图标，可参考此格式制作</li>
+    </ol>
+  </div>
+
+  <script>
+    const size = 81;
+    const inactiveColor = '#999999';
+    const activeColor = '#6C5CE7';
+
+    const icons = [
+      { name: 'habit.png', label: '习惯 (未选中)', type: 'habit', color: inactiveColor },
+      { name: 'habit-active.png', label: '习惯 (选中)', type: 'habit', color: activeColor },
+      { name: 'stats.png', label: '统计 (未选中)', type: 'stats', color: inactiveColor },
+      { name: 'stats-active.png', label: '统计 (选中)', type: 'stats', color: activeColor },
+      { name: 'mine.png', label: '我的 (未选中)', type: 'mine', color: inactiveColor },
+      { name: 'mine-active.png', label: '我的 (选中)', type: 'mine', color: activeColor }
+    ];
+
+    function drawHabitIcon(ctx, color) {
+      const center = size / 2;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+
+      // Outer circle
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(center, center, 30, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Middle circle
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(center, center, 18, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Center dot
+      ctx.beginPath();
+      ctx.arc(center, center, 7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function drawStatsIcon(ctx, color) {
+      ctx.fillStyle = color;
+      const barWidth = 16;
+      const gap = 8;
+      const startX = 14;
+
+      // Three bars with different heights
+      ctx.fillRect(startX, 45, barWidth, 25);
+      ctx.fillRect(startX + barWidth + gap, 30, barWidth, 40);
+      ctx.fillRect(startX + 2 * (barWidth + gap), 15, barWidth, 55);
+    }
+
+    function drawMineIcon(ctx, color) {
+      ctx.fillStyle = color;
+      const center = size / 2;
+
+      // Head
+      ctx.beginPath();
+      ctx.arc(center, 24, 12, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Body
+      ctx.beginPath();
+      ctx.arc(center, 70, 24, Math.PI, 0, true);
+      ctx.fill();
+    }
+
+    function createIcon(type, color) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // Clear with transparency
+      ctx.clearRect(0, 0, size, size);
+
+      switch(type) {
+        case 'habit': drawHabitIcon(ctx, color); break;
+        case 'stats': drawStatsIcon(ctx, color); break;
+        case 'mine': drawMineIcon(ctx, color); break;
+      }
+
+      return canvas;
+    }
+
+    function downloadCanvas(canvas, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadAll() {
+      icons.forEach((icon, index) => {
+        setTimeout(() => {
+          const canvas = createIcon(icon.type, icon.color);
+          downloadCanvas(canvas, icon.name);
+        }, index * 200);
+      });
+    }
+
+    // Render preview icons
+    const grid = document.getElementById('iconsGrid');
+    icons.forEach(icon => {
+      const card = document.createElement('div');
+      card.className = 'icon-card';
+
+      const canvas = createIcon(icon.type, icon.color);
+      const name = document.createElement('div');
+      name.className = 'icon-name';
+      name.textContent = icon.label;
+
+      const btn = document.createElement('button');
+      btn.className = 'download-btn';
+      btn.textContent = '下载';
+      btn.onclick = () => downloadCanvas(canvas, icon.name);
+
+      card.appendChild(canvas);
+      card.appendChild(name);
+      card.appendChild(btn);
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>

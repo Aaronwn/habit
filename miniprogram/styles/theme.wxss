@@ -1,0 +1,118 @@
+/* styles/theme.wxss - 主题样式 */
+
+/* 主题色定义 */
+:root {
+  --primary-color: #6C5CE7;
+  --primary-light: #A29BFE;
+  --primary-dark: #5F4FD1;
+
+  --success-color: #00B894;
+  --danger-color: #FF6B6B;
+  --warning-color: #FDCB6E;
+  --info-color: #74B9FF;
+
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-tertiary: #999;
+
+  --bg-page: #F5F6FA;
+  --bg-card: #FFFFFF;
+
+  --border-color: #E8E8E8;
+
+  --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 主题色卡 */
+.color-primary {
+  background-color: #6C5CE7;
+}
+
+.color-success {
+  background-color: #00B894;
+}
+
+.color-danger {
+  background-color: #FF6B6B;
+}
+
+.color-warning {
+  background-color: #FDCB6E;
+}
+
+.color-info {
+  background-color: #74B9FF;
+}
+
+/* 渐变背景 */
+.gradient-primary {
+  background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #00B894 0%, #55EFC4 100%);
+}
+
+.gradient-danger {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF7979 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #FDCB6E 0%, #FFEAA7 100%);
+}
+
+/* 习惯主题色（预设多个颜色供用户选择）*/
+.habit-color-1 {
+  background-color: #FF6B6B;
+}
+
+.habit-color-2 {
+  background-color: #6C5CE7;
+}
+
+.habit-color-3 {
+  background-color: #00B894;
+}
+
+.habit-color-4 {
+  background-color: #FDCB6E;
+}
+
+.habit-color-5 {
+  background-color: #74B9FF;
+}
+
+.habit-color-6 {
+  background-color: #FD79A8;
+}
+
+.habit-color-7 {
+  background-color: #A29BFE;
+}
+
+.habit-color-8 {
+  background-color: #55EFC4;
+}
+
+.habit-color-9 {
+  background-color: #FAB1A0;
+}
+
+.habit-color-10 {
+  background-color: #81ECEC;
+}
+
+/* 阴影样式 */
+.shadow-sm {
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.shadow-lg {
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+}

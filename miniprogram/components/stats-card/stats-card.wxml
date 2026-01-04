@@ -1,0 +1,27 @@
+<!-- components/stats-card/stats-card.wxml -->
+<view class="stats-card size-{{size}}" style="--theme-color: {{color}}">
+  <!-- 图标 -->
+  <view class="card-icon" wx:if="{{icon}}" style="background-color: {{color}}20">
+    <text class="icon-text">{{icon}}</text>
+  </view>
+
+  <!-- 内容区 -->
+  <view class="card-content">
+    <!-- 数值行 -->
+    <view class="value-row">
+      <text class="value-text" style="color: {{color}}">{{value}}</text>
+      <text class="unit-text" wx:if="{{unit}}">{{unit}}</text>
+      <!-- 趋势指示器 -->
+      <view class="trend-indicator {{trendClass}}" wx:if="{{trend !== 'none'}}">
+        <text class="trend-icon">{{trendIcon}}</text>
+        <text class="trend-value" wx:if="{{trendValue}}">{{trendValue}}</text>
+      </view>
+    </view>
+
+    <!-- 标题 -->
+    <text class="title-text">{{title}}</text>
+
+    <!-- 副标题 -->
+    <text class="subtitle-text" wx:if="{{subtitle}}">{{subtitle}}</text>
+  </view>
+</view>

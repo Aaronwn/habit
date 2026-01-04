@@ -1,0 +1,148 @@
+<!-- pages/stats/stats.wxml -->
+<view class="page-container">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <view class="header-title">
+      <text class="title-icon">📊</text>
+      <text class="title-text">数据统计</text>
+    </view>
+    <picker
+      mode="selector"
+      range="{{timeRangeOptions}}"
+      range-key="label"
+      bindchange="onTimeRangeChange"
+    >
+      <view class="time-range-picker">
+        <text class="picker-text">{{timeRangeOptions[timeRange === 'week' ? 0 : (timeRange === 'month' ? 1 : 2)].label}}</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 总览卡片 -->
+    <view class="overview-section">
+      <view class="stats-grid">
+        <stats-card
+          title="累计打卡"
+          value="{{totalCheckIns}}"
+          unit="次"
+          icon="📊"
+          color="#6C5CE7"
+        />
+        <stats-card
+          title="当前连续"
+          value="{{currentStreak}}"
+          unit="天"
+          icon="🔥"
+          color="#FF6B6B"
+        />
+        <stats-card
+          title="最长连续"
+          value="{{longestStreak}}"
+          unit="天"
+          icon="🏆"
+          color="#FDCB6E"
+        />
+        <stats-card
+          title="打卡率"
+          value="{{checkInRate}}"
+          unit="%"
+          icon="📈"
+          color="#00B894"
+        />
+      </view>
+    </view>
+
+    <!-- 本周趋势 -->
+    <view class="week-chart-section">
+      <view class="section-header">
+        <text class="section-title">本周趋势</text>
+      </view>
+      <view class="week-chart">
+        <view class="chart-bars">
+          <view
+            wx:for="{{weekData}}"
+            wx:key="date"
+            class="bar-item {{item.isToday ? 'today' : ''}}"
+          >
+            <view class="bar-wrapper">
+              <view
+                class="bar-fill"
+                style="height: {{item.rate > 0 ? item.rate : 5}}%"
+              ></view>
+            </view>
+            <text class="bar-label">{{weekLabels[index]}}</text>
+            <text class="bar-value">{{item.count}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 习惯详细统计 -->
+    <view class="habits-stats-section">
+      <view class="section-header">
+        <text class="section-title">习惯统计</text>
+        <text class="section-subtitle">点击查看详情</text>
+      </view>
+
+      <view wx:if="{{habitsStats.length > 0}}" class="habits-stats-list">
+        <view
+          wx:for="{{habitsStats}}"
+          wx:key="habitId"
+          class="habit-stat-item"
+          data-habitid="{{item.habitId}}"
+          bindtap="onHabitStatTap"
+        >
+          <view class="habit-stat-header">
+            <view class="habit-icon-wrapper" style="background-color: {{item.color}}20">
+              <text class="habit-icon">{{item.icon}}</text>
+            </view>
+            <view class="habit-info">
+              <text class="habit-name">{{item.name}}</text>
+              <view class="habit-meta">
+                <text class="meta-item">🔥 {{item.currentStreak}}天</text>
+                <text class="meta-item">✓ {{item.totalCheckIns}}次</text>
+              </view>
+            </view>
+            <text class="habit-arrow">›</text>
+          </view>
+
+          <!-- 进度条 -->
+          <view class="habit-progress">
+            <view class="progress-bar-bg">
+              <view
+                class="progress-bar-fill"
+                style="width: {{item.rate}}%; background-color: {{item.color}}"
+              ></view>
+            </view>
+            <text class="progress-text" style="color: {{item.color}}">{{item.rate}}%</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view wx:else class="empty-state">
+        <view class="empty-illustration">
+          <text class="empty-emoji">📈</text>
+        </view>
+        <text class="empty-title">暂无统计数据</text>
+        <text class="empty-desc">创建习惯并开始打卡后，这里将显示统计信息</text>
+      </view>
+    </view>
+
+    <!-- 小贴士 -->
+    <view class="tips-section" wx:if="{{habitsStats.length > 0}}">
+      <view class="tip-card">
+        <text class="tip-icon">💡</text>
+        <text class="tip-text">坚持每天打卡，养成好习惯！连续打卡天数越多，成就感越强哦~</text>
+      </view>
+    </view>
+  </block>
+</view>

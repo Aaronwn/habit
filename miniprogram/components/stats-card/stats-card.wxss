@@ -1,0 +1,147 @@
+/* components/stats-card/stats-card.wxss */
+
+.stats-card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.stats-card:active {
+  transform: scale(0.98);
+}
+
+/* 尺寸变体 */
+.stats-card.size-small {
+  padding: 20rpx;
+}
+
+.stats-card.size-small .card-icon {
+  width: 64rpx;
+  height: 64rpx;
+}
+
+.stats-card.size-small .icon-text {
+  font-size: 32rpx;
+}
+
+.stats-card.size-small .value-text {
+  font-size: 36rpx;
+}
+
+.stats-card.size-large {
+  padding: 36rpx;
+  flex-direction: column;
+  text-align: center;
+}
+
+.stats-card.size-large .card-icon {
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 0;
+  margin-bottom: 20rpx;
+}
+
+.stats-card.size-large .icon-text {
+  font-size: 48rpx;
+}
+
+.stats-card.size-large .value-text {
+  font-size: 56rpx;
+}
+
+.stats-card.size-large .card-content {
+  align-items: center;
+}
+
+/* 图标 */
+.card-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.icon-text {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+/* 内容区 */
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* 数值行 */
+.value-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-bottom: 6rpx;
+}
+
+.value-text {
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.unit-text {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 6rpx;
+  font-weight: 400;
+}
+
+/* 趋势指示器 */
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  margin-left: 12rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+}
+
+.trend-indicator.trend-up {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+
+.trend-indicator.trend-down {
+  background-color: #FFEBEE;
+  color: #F44336;
+}
+
+.trend-icon {
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.trend-value {
+  margin-left: 4rpx;
+}
+
+/* 标题 */
+.title-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* 副标题 */
+.subtitle-text {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}

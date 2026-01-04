@@ -1,0 +1,52 @@
+<!-- components/habit-card/habit-card.wxml -->
+<view
+  class="habit-card {{isCheckedToday ? 'checked' : ''}} {{animating ? 'animating' : ''}}"
+  style="border-left: 8rpx solid {{habit.color || '#6C5CE7'}}"
+  bindtap="onTap"
+  bindlongpress="onLongPress"
+>
+  <!-- 主要内容区域 -->
+  <view class="card-main">
+    <!-- 左侧：图标 -->
+    <view class="habit-icon-wrapper" style="background-color: {{habit.color || '#6C5CE7'}}20">
+      <text class="habit-icon">{{habit.icon || '⭐'}}</text>
+    </view>
+
+    <!-- 中间：信息 -->
+    <view class="habit-info">
+      <view class="habit-name-row">
+        <text class="habit-name">{{habit.name}}</text>
+        <!-- 连续打卡徽章 -->
+        <view wx:if="{{streak > 0}}" class="streak-badge">
+          <text class="streak-icon">🔥</text>
+          <text class="streak-count">{{streak}}</text>
+        </view>
+      </view>
+
+      <!-- 描述或目标 -->
+      <view class="habit-meta">
+        <text wx:if="{{habit.targetValue && habit.unit}}" class="habit-target">
+          目标: {{habit.targetValue}}{{habit.unit}}
+        </text>
+        <text wx:elif="{{habit.description}}" class="habit-desc">{{habit.description}}</text>
+        <text wx:else class="habit-desc">每天坚持</text>
+      </view>
+
+      <!-- 今日打卡信息 -->
+      <view wx:if="{{checkIn && checkIn.completed}}" class="today-info">
+        <text wx:if="{{checkIn.value}}" class="today-value">
+          今日: {{checkIn.value}}{{habit.unit || ''}}
+        </text>
+        <text wx:if="{{checkIn.note}}" class="today-note">{{checkIn.note}}</text>
+      </view>
+    </view>
+
+    <!-- 右侧：打卡按钮 -->
+    <view class="check-btn-wrapper" catchtap="onQuickCheckIn">
+      <view class="check-btn {{isCheckedToday ? 'checked' : ''}}" style="border-color: {{habit.color || '#6C5CE7'}}; {{isCheckedToday ? 'background-color:' + (habit.color || '#6C5CE7') : ''}}">
+        <text class="check-icon">{{isCheckedToday ? '✓' : ''}}</text>
+      </view>
+      <text class="check-text">{{isCheckedToday ? '已完成' : '打卡'}}</text>
+    </view>
+  </view>
+</view>

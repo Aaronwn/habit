@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "添加习惯",
+  "backgroundColor": "#F5F6FA",
+  "usingComponents": {
+    "icon-picker": "/components/icon-picker/icon-picker"
+  }
+}

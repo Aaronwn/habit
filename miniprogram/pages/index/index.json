@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "habit-card": "/components/habit-card/habit-card"
+  },
+  "navigationBarTitleText": "我的习惯",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F5F6FA",
+  "backgroundTextStyle": "dark"
+}

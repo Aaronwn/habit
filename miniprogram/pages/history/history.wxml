@@ -1,0 +1,127 @@
+<!-- pages/history/history.wxml -->
+<view class="page-container">
+  <!-- 习惯信息头部 -->
+  <view
+    class="habit-header"
+    wx:if="{{habit}}"
+    style="background: linear-gradient(135deg, {{habit.color || '#6C5CE7'}} 0%, {{habit.color || '#6C5CE7'}}CC 100%)"
+  >
+    <view class="habit-icon-wrapper">
+      <text class="habit-icon">{{habit.icon || '🎯'}}</text>
+    </view>
+    <view class="habit-info">
+      <text class="habit-name">{{habit.name}}</text>
+      <text class="habit-desc" wx:if="{{habit.description}}">{{habit.description}}</text>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-value">{{completedDays}}</text>
+      <text class="stat-label">完成天数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{currentStreak}}</text>
+      <text class="stat-label">连续天数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{completionRate}}%</text>
+      <text class="stat-label">完成率</text>
+    </view>
+  </view>
+
+  <!-- 日历视图 -->
+  <view class="calendar-section">
+    <calendar
+      checkInData="{{checkInData}}"
+      color="{{habit.color || '#6C5CE7'}}"
+      selectedDate="{{selectedDate}}"
+      bind:dateselect="onDateSelect"
+      bind:monthchange="onMonthChange"
+    />
+  </view>
+
+  <!-- 选中日期的打卡详情 -->
+  <view class="selected-detail" bindtap="onCheckInTap">
+    <view class="detail-header">
+      <text class="detail-date">{{selectedDate}}</text>
+      <view class="detail-action">
+        <text class="action-text">{{selectedCheckIn ? '编辑' : '打卡'}}</text>
+        <text class="action-icon">›</text>
+      </view>
+    </view>
+
+    <view wx:if="{{selectedCheckIn}}" class="detail-content">
+      <view class="detail-status">
+        <view
+          class="status-badge {{selectedCheckIn.completed ? 'completed' : 'incomplete'}}"
+          style="{{selectedCheckIn.completed ? 'background-color: ' + (habit.color || '#6C5CE7') : ''}}"
+        >
+          <text class="status-icon">{{selectedCheckIn.completed ? '✓' : '○'}}</text>
+          <text class="status-text">{{selectedCheckIn.completed ? '已完成' : '未完成'}}</text>
+        </view>
+        <text class="detail-value" wx:if="{{selectedCheckIn.value}}">
+          {{selectedCheckIn.value}} {{habit.unit || ''}}
+        </text>
+      </view>
+      <view class="detail-note" wx:if="{{selectedCheckIn.note}}">
+        <text class="note-icon">📝</text>
+        <text class="note-text">{{selectedCheckIn.note}}</text>
+      </view>
+    </view>
+
+    <view wx:else class="detail-empty">
+      <text class="empty-icon">📅</text>
+      <text class="empty-text">点击添加打卡记录</text>
+    </view>
+  </view>
+
+  <!-- 最近打卡记录列表 -->
+  <view class="history-section" wx:if="{{checkIns.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">打卡记录</text>
+      <text class="section-count">共 {{completedDays}} 次</text>
+    </view>
+
+    <view class="history-list">
+      <view
+        wx:for="{{checkIns}}"
+        wx:key="_id"
+        class="history-item {{item.completed ? 'completed' : ''}}"
+        data-date="{{item.date}}"
+        bindtap="onHistoryItemTap"
+      >
+        <view class="item-left">
+          <view
+            class="item-dot"
+            style="{{item.completed ? 'background-color: ' + (habit.color || '#6C5CE7') : ''}}"
+          ></view>
+          <view class="item-info">
+            <text class="item-date">{{item.date}}</text>
+            <text class="item-note" wx:if="{{item.note}}">{{item.note}}</text>
+          </view>
+        </view>
+        <view class="item-right">
+          <text class="item-value" wx:if="{{item.value}}">{{item.value}} {{habit.unit || ''}}</text>
+          <text class="item-status">{{item.completed ? '✓' : '○'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && checkIns.length === 0}}" class="empty-state">
+    <view class="empty-illustration">
+      <text class="empty-emoji">📊</text>
+    </view>
+    <text class="empty-title">暂无打卡记录</text>
+    <text class="empty-desc">在日历上选择日期开始记录吧</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

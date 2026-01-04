@@ -1,0 +1,121 @@
+<!-- pages/checkin/checkin.wxml -->
+<view class="page-container" wx:if="{{!loading}}">
+  <!-- 习惯信息卡片 -->
+  <view class="habit-header" style="background: linear-gradient(135deg, {{habit.color || '#6C5CE7'}} 0%, {{habit.color || '#6C5CE7'}}CC 100%)">
+    <view class="habit-icon-wrapper">
+      <text class="habit-icon">{{habit.icon || '🎯'}}</text>
+    </view>
+    <view class="habit-info">
+      <text class="habit-name">{{habit.name || '习惯'}}</text>
+      <text class="habit-desc" wx:if="{{habit.description}}">{{habit.description}}</text>
+      <view class="habit-target" wx:if="{{habit.targetValue}}">
+        <text class="target-text">目标：{{habit.targetValue}} {{habit.unit || ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 日期显示 -->
+  <view class="date-card">
+    <view class="date-icon">📅</view>
+    <view class="date-info">
+      <text class="date-label">打卡日期</text>
+      <text class="date-value">{{dateDisplay}}</text>
+    </view>
+    <view class="date-status" wx:if="{{existingCheckIn}}">
+      <text class="status-tag">已打卡</text>
+    </view>
+  </view>
+
+  <!-- 打卡表单 -->
+  <view class="form-container">
+    <!-- 快速完成按钮 -->
+    <view class="quick-complete-section">
+      <view
+        class="quick-complete-btn {{completed ? 'completed' : ''}}"
+        style="{{completed ? 'background: linear-gradient(135deg, ' + (habit.color || '#6C5CE7') + ' 0%, ' + (habit.color || '#6C5CE7') + 'CC 100%)' : ''}}"
+        bindtap="onQuickComplete"
+      >
+        <view class="complete-icon-wrapper">
+          <text class="complete-icon">{{completed ? '✓' : '○'}}</text>
+        </view>
+        <text class="complete-text">{{completed ? '已完成' : '点击完成'}}</text>
+      </view>
+    </view>
+
+    <!-- 完成数量（如果有单位） -->
+    <view class="form-card" wx:if="{{habit.unit || habit.targetValue}}">
+      <view class="form-section-title">
+        <text class="section-icon">📊</text>
+        <text>完成数量</text>
+      </view>
+      <view class="value-input-group">
+        <view class="value-btn" bindtap="onValueDecrease">
+          <text class="value-btn-icon">−</text>
+        </view>
+        <view class="value-input-wrapper">
+          <input
+            class="value-input"
+            type="digit"
+            placeholder="0"
+            value="{{value}}"
+            bindinput="onValueInput"
+          />
+          <text class="value-unit" wx:if="{{habit.unit}}">{{habit.unit}}</text>
+        </view>
+        <view class="value-btn" bindtap="onValueIncrease">
+          <text class="value-btn-icon">+</text>
+        </view>
+      </view>
+      <!-- 目标进度 -->
+      <view class="progress-hint" wx:if="{{habit.targetValue && value}}">
+        <view class="progress-bar-bg">
+          <view
+            class="progress-bar-fill"
+            style="width: {{value / habit.targetValue * 100 > 100 ? 100 : value / habit.targetValue * 100}}%; background-color: {{habit.color || '#6C5CE7'}}"
+          ></view>
+        </view>
+        <text class="progress-text">{{value}} / {{habit.targetValue}} {{habit.unit || ''}}</text>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-card">
+      <view class="form-section-title">
+        <text class="section-icon">📝</text>
+        <text>打卡备注</text>
+        <text class="optional-tag">选填</text>
+      </view>
+      <textarea
+        class="note-textarea"
+        placeholder="记录今天的感受、心得..."
+        value="{{note}}"
+        bindinput="onNoteInput"
+        maxlength="200"
+        auto-height
+      />
+      <view class="note-counter">{{note.length}}/200</view>
+    </view>
+  </view>
+
+  <!-- 底部操作区 -->
+  <view class="bottom-actions">
+    <button
+      class="submit-btn"
+      style="background: linear-gradient(135deg, {{habit.color || '#6C5CE7'}} 0%, {{habit.color || '#6C5CE7'}}CC 100%)"
+      bindtap="onSubmit"
+      disabled="{{saving}}"
+    >
+      {{saving ? '保存中...' : (existingCheckIn ? '更新打卡' : '保存打卡')}}
+    </button>
+
+    <view class="delete-btn" wx:if="{{existingCheckIn}}" bindtap="onDelete">
+      <text class="delete-text">删除记录</text>
+    </view>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view class="loading-container" wx:else>
+  <view class="loading-spinner"></view>
+  <text class="loading-text">加载中...</text>
+</view>
