@@ -23,21 +23,11 @@
         </view>
       </view>
 
-      <!-- 描述或目标 -->
-      <view class="habit-meta">
-        <text wx:if="{{habit.targetValue && habit.unit}}" class="habit-target">
-          目标: {{habit.targetValue}}{{habit.unit}}
-        </text>
-        <text wx:elif="{{habit.description}}" class="habit-desc">{{habit.description}}</text>
-        <text wx:else class="habit-desc">每天坚持</text>
-      </view>
-
       <!-- 今日打卡信息 -->
-      <view wx:if="{{checkIn && checkIn.completed}}" class="today-info">
-        <text wx:if="{{checkIn.value}}" class="today-value">
+      <view wx:if="{{checkIn && checkIn.completed && checkIn.value}}" class="today-info">
+        <text class="today-value">
           今日: {{checkIn.value}}{{habit.unit || ''}}
         </text>
-        <text wx:if="{{checkIn.note}}" class="today-note">{{checkIn.note}}</text>
       </view>
     </view>
 

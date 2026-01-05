@@ -14,17 +14,29 @@ exports.main = async (event, context) => {
       return { success: false, error: '习惯ID不能为空' }
     }
 
+    console.log('更新习惯:', { habitId, updateData })
+
     const now = new Date()
     updateData.updatedAt = now
 
-    await db.collection('habits')
+    // 先验证该习惯属于当前用户
+    const { data: [habit] } = await db.collection('habits')
       .where({
-        _openid: wxContext.OPENID,
-        _id: habitId
+        _id: habitId,
+        _openid: wxContext.OPENID
       })
-      .update({
-        data: updateData
-      })
+      .get()
+
+    if (!habit) {
+      return { success: false, error: '习惯不存在或无权限' }
+    }
+
+    // 使用 doc().update() 方式更新
+    await db.collection('habits').doc(habitId).update({
+      data: updateData
+    })
+
+    console.log('更新成功')
 
     return { success: true }
   } catch (err) {

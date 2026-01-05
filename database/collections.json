@@ -37,10 +37,10 @@
   _openid: String,          // 用户openid
   name: String,             // 习惯名称（必填，1-20字符）
   icon: String,             // emoji图标
-  description: String,      // 描述（可选，最多100字符）
-  unit: String,             // 计量单位（可选，如"公里"、"分钟"）
-  targetValue: Number,      // 目标值（可选）
-  frequency: String,        // 频率："daily"（第一版仅支持每日）
+  frequency: {              // 打卡频率
+    type: String,           // 频率类型："daily"（每天）或 "weekly"（每周）
+    timesPerWeek: Number    // 每周次数（仅 weekly 时有效，1-7）
+  },
   color: String,            // 主题颜色（十六进制，如"#6C5CE7"）
   sort: Number,             // 排序字段
   isActive: Boolean,        // 是否激活（软删除标记）

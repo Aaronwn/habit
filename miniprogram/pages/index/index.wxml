@@ -38,8 +38,8 @@
           habit="{{item}}"
           checkIn="{{todayCheckIns[item._id]}}"
           streak="{{streaks[item._id] || 0}}"
-          bind:tap="onHabitTap"
-          bind:longpress="onHabitLongPress"
+          bind:habittap="onHabitTap"
+          bind:habitlongpress="onHabitLongPress"
           bind:quickcheckin="onQuickCheckIn"
         />
       </block>

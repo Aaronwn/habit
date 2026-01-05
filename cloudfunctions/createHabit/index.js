@@ -7,7 +7,7 @@ const db = cloud.database()
 
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const { name, icon = '⭐', color = '#6C5CE7', description, unit, targetValue } = event
+  const { name, icon = '⭐', color = '#6C5CE7', frequency = { type: 'daily' } } = event
 
   try {
     // 验证必填字段
@@ -31,10 +31,7 @@ exports.main = async (event, context) => {
         name: name.trim(),
         icon,
         color,
-        description: description || '',
-        unit: unit || '',
-        targetValue: targetValue || null,
-        frequency: 'daily',
+        frequency,
         sort: total,
         isActive: true,
         createdAt: now,

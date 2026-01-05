@@ -41,12 +41,12 @@ Component({
     },
 
     onTap() {
-      this.triggerEvent('tap', { habit: this.data.habit })
+      this.triggerEvent('habittap', { habit: this.data.habit })
     },
 
     onLongPress() {
       wx.vibrateShort({ type: 'medium' })
-      this.triggerEvent('longpress', { habit: this.data.habit })
+      this.triggerEvent('habitlongpress', { habit: this.data.habit })
     },
 
     // 快速打卡按钮点击
