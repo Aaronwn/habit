@@ -4,6 +4,7 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
 const db = cloud.database()
+const _ = db.command
 
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
@@ -18,6 +19,15 @@ exports.main = async (event, context) => {
 
     const now = new Date()
     updateData.updatedAt = now
+
+    // 规范化频率字段，确保写入对象格式
+    if (updateData.frequency) {
+      const { type = 'daily', timesPerWeek = 3 } = updateData.frequency
+      updateData.frequency = _.set({
+        type,
+        timesPerWeek: type === 'weekly' ? timesPerWeek : undefined
+      })
+    }
 
     // 先验证该习惯属于当前用户
     const { data: [habit] } = await db.collection('habits')

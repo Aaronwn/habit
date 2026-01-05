@@ -24,9 +24,28 @@ exports.main = async (event, context) => {
       .orderBy('createdAt', 'desc')
       .get()
 
+    // 兼容频率字段旧格式，统一返回对象
+    const normalized = data.map(item => {
+      let frequency = { type: 'daily', timesPerWeek: 3 }
+      if (item.frequency) {
+        if (typeof item.frequency === 'object') {
+          frequency = {
+            type: item.frequency.type || 'daily',
+            timesPerWeek: item.frequency.timesPerWeek || 3
+          }
+        } else if (typeof item.frequency === 'string') {
+          frequency = { type: item.frequency, timesPerWeek: 3 }
+        }
+      }
+      return {
+        ...item,
+        frequency
+      }
+    })
+
     return {
       success: true,
-      data: data
+      data: normalized
     }
   } catch (err) {
     console.error('获取习惯列表失败:', err)
